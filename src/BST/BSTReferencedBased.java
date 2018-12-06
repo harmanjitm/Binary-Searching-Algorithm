@@ -177,13 +177,25 @@ public class BSTReferencedBased<E extends Comparable<? super E>> implements BSTr
         {
             throw new NullPointerException();
         }
-        if()
-        return false;
+        root = addNode(root, newEntry);
+        return true;
     }
 
     public BSTNode<E> addNode(BSTNode<E> toStart, E toAdd)
     {
-
+        if(toStart.data.compareTo(toAdd) == 0)
+        {
+            return toStart;
+        }
+        if(toAdd.compareTo(toStart.data) < 0)
+        {
+            toStart.left = addNode(toStart.left, toAdd);
+        }
+        else
+        {
+            toStart.right = addNode(toStart.right, toAdd);
+        }
+        return toStart;
     }
 
     /**
