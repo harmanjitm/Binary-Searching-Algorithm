@@ -1,55 +1,78 @@
 package test;
 
-import org.junit.Test;
+import BST.BSTReferencedBased;
+import exceptions.TreeException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class BSTReferencedBasedTest {
 
+    BSTReferencedBased bst = null;
+    int num1 = 1;
+    int num2 = 2;
+    int num3 = 3;
+
     @BeforeEach
     void setUp() {
+        bst = new BSTReferencedBased();
     }
 
-    @org.junit.jupiter.api.Test
-    void getRootData() {
+    @Test
+    void getRootData() throws TreeException {
+        assertEquals(true, bst.add(num1));
+        assertEquals(num1,bst.getRootData());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getHeight() {
+        assertEquals(true, bst.add(num1));
+        assertEquals(1,bst.getHeight());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void size() {
+        assertEquals(true, bst.add(num1));
+        assertEquals(true, bst.add(num2));
+        assertEquals(2,bst.size());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void isEmpty() {
+        assertEquals(true, bst.isEmpty());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void clear() {
+        assertEquals(true, bst.add(num1));
+        bst.clear();
+        try {
+            bst.getRootData();
+            fail("List is not cleared");
+        }
+        catch (TreeException e)
+        {
+            assertTrue(true);
+        }
     }
 
-    @org.junit.jupiter.api.Test
-    void contains() {
+    @Test
+    void contains() throws TreeException {
+        assertEquals(true, bst.add(num1));
+        assertEquals(true,bst.contains(num1));
     }
 
-    @org.junit.jupiter.api.Test
-    void getEntry() {
+    @Test
+    void getEntry() throws TreeException {
+        assertEquals(true, bst.add(num1));
+        assertEquals(true, bst.add(num2));
+        assertEquals(num2,bst.getEntry(num2));
     }
 
-    @org.junit.jupiter.api.Test
-    void add() {
-    }
-
-    @org.junit.jupiter.api.Test
-    void inorderIterator() {
-    }
-
-    @org.junit.jupiter.api.Test
-    void preorderIterator() {
-    }
-
-    @org.junit.jupiter.api.Test
-    void postorderIterator() {
+    @Test
+    void add() throws TreeException {
+        assertEquals(true, bst.add(num1));
+        assertEquals(true, bst.contains(num1));
     }
 }

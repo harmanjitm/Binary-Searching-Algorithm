@@ -173,7 +173,7 @@ public class BSTReferencedBased<E extends Comparable<? super E>> implements BSTr
      */
     @Override
     public boolean add(E newEntry) throws NullPointerException {
-        if(root == null)
+        if(newEntry == null)
         {
             throw new NullPointerException();
         }
@@ -183,6 +183,10 @@ public class BSTReferencedBased<E extends Comparable<? super E>> implements BSTr
 
     public BSTNode<E> addNode(BSTNode<E> toStart, E toAdd)
     {
+        if(toStart == null)
+        {
+            toStart.data = toAdd;
+        }
         if(toStart.data.compareTo(toAdd) == 0)
         {
             return toStart;
