@@ -2,7 +2,6 @@ package BST;
 
 import ADT.BSTreeADT;
 import exceptions.TreeException;
-import sun.reflect.generics.tree.Tree;
 import utility.DLL;
 
 import java.util.Iterator;
@@ -10,7 +9,8 @@ import java.util.Iterator;
 public class BSTReferencedBased<E extends Comparable<? super E>> implements BSTreeADT<E> {
 
     DLL list = new DLL();
-    BSTNode root = null;
+    BSTNode<E> root = null;
+    int size = 0;
 
     public BSTReferencedBased()
     {
@@ -49,7 +49,7 @@ public class BSTReferencedBased<E extends Comparable<? super E>> implements BSTr
     {
         if(node == null)
         {
-            return -1;
+            return 0;
         }
         else
         {
@@ -65,24 +65,24 @@ public class BSTReferencedBased<E extends Comparable<? super E>> implements BSTr
      */
     @Override
     public int size() {
-        return sizeCalc(root);
+        return size;
     }
 
-    private int sizeCalc(BSTNode<E> root)
-    {
-        if(root == null)
-        {
-            return 0;
-        }
-        else if(root.left == null && root.right == null)
-        {
-            return 1;
-        }
-        else
-        {
-            return sizeCalc(root.left) + sizeCalc(root.right);
-        }
-    }
+//    private int sizeCalc(BSTNode<E> root)
+//    {
+//        if(root == null)
+//        {
+//            return 0;
+//        }
+//        else if(root.left == null && root.right == null)
+//        {
+//            return 1;
+//        }
+//        else
+//        {
+//            return sizeCalc(root.left) + sizeCalc(root.right);
+//        }
+//    }
 
     /**
      * Checks if the tree is currently empty.
@@ -91,7 +91,7 @@ public class BSTReferencedBased<E extends Comparable<? super E>> implements BSTr
      */
     @Override
     public boolean isEmpty() {
-        if(root!=null)
+        if(root==null)
         {
             return true;
         }
@@ -106,6 +106,7 @@ public class BSTReferencedBased<E extends Comparable<? super E>> implements BSTr
         root.left = null;
         root.right = null;
         root = null;
+        size = 0;
     }
 
     /**
@@ -152,15 +153,20 @@ public class BSTReferencedBased<E extends Comparable<? super E>> implements BSTr
      */
     @Override
     public E getEntry(E entry) throws TreeException {
-        if(entry == null)
+        return entryThing(root, entry).data;
+    }
+
+    private BSTNode<E> entryThing(BSTNode<E> root, E entry)
+    {
+        if(root==null || root.data == entry)
         {
-            throw new TreeException();
+            return root;
         }
-        if(contains(entry))
+        if(root.data.compareTo(entry) == 1)
         {
-            return entry;
+            return entryThing(root.left, entry);
         }
-        return null;
+        return entryThing(root.right, entry);
     }
 
     /**
@@ -178,28 +184,30 @@ public class BSTReferencedBased<E extends Comparable<? super E>> implements BSTr
             throw new NullPointerException();
         }
         root = addNode(root, newEntry);
+        size++;
         return true;
     }
 
-    public BSTNode<E> addNode(BSTNode<E> toStart, E toAdd)
+    public BSTNode<E> addNode(BSTNode<E> root, E toAdd)
     {
-        if(toStart == null)
+        if(root == null)
         {
-            toStart.data = toAdd;
+            root = new BSTNode(toAdd);
+            return root;
         }
-        if(toStart.data.compareTo(toAdd) == 0)
+        if(root.data.compareTo(toAdd) == 0)
         {
-            return toStart;
+            return root;
         }
-        if(toAdd.compareTo(toStart.data) < 0)
+        if(toAdd.compareTo(root.data) < 0)
         {
-            toStart.left = addNode(toStart.left, toAdd);
+            root.left = addNode(root.left, toAdd);
         }
         else
         {
-            toStart.right = addNode(toStart.right, toAdd);
+            root.right = addNode(root.right, toAdd);
         }
-        return toStart;
+        return root;
     }
 
     /**
