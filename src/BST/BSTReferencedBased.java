@@ -4,7 +4,10 @@ import ADT.BSTreeADT;
 import exceptions.TreeException;
 import utility.DLL;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Stack;
 
 public class BSTReferencedBased<E extends Comparable<? super E>> implements BSTreeADT<E> {
 
@@ -158,15 +161,23 @@ public class BSTReferencedBased<E extends Comparable<? super E>> implements BSTr
 
     private BSTNode<E> entryThing(BSTNode<E> root, E entry)
     {
-        if(root==null || root.data == entry)
+        if(root==null)
         {
+            System.out.println("t");
             return root;
         }
-        if(root.data.compareTo(entry) == 1)
+        if(entry.compareTo(root.data) < 0)
         {
             return entryThing(root.left, entry);
         }
-        return entryThing(root.right, entry);
+        else if(entry.compareTo(root.data) > 0)
+        {
+            return entryThing(root.right, entry);
+        }
+        else
+        {
+            return root;
+        }
     }
 
     /**
@@ -218,7 +229,31 @@ public class BSTReferencedBased<E extends Comparable<? super E>> implements BSTr
      */
     @Override
     public Iterator<E> inorderIterator() {
-        return null;
+        ArrayList<E> list = new ArrayList<>();
+        if(root == null)
+        {
+            return null;
+        }
+
+        Stack<BSTNode<E>> stack = new Stack<>();
+        BSTNode<E> temp = root;
+
+        while(!stack.isEmpty() || temp != null)
+        {
+            if(temp != null)
+            {
+                stack.push(temp);
+                temp = temp.left;
+            }
+            else
+            {
+                temp = stack.pop();
+                list.add(temp.data);
+                temp = temp.right;
+            }
+        }
+
+        return list.iterator();
     }
 
     /**
@@ -229,7 +264,30 @@ public class BSTReferencedBased<E extends Comparable<? super E>> implements BSTr
      */
     @Override
     public Iterator<E> preorderIterator() {
-        return null;
+        ArrayList<E> list = new ArrayList<>();
+        if(root == null)
+        {
+            return null;
+        }
+
+        Stack<BSTNode<E>> stack = new Stack<>();
+        stack.push(root);
+
+        while(!stack.isEmpty())
+        {
+            BSTNode<E> temp = stack.pop();
+            list.add(temp.data);
+            if(temp.right != null)
+            {
+                stack.push(temp.right);
+            }
+            if(temp.left != null)
+            {
+                stack.push(temp.left);
+            }
+        }
+
+        return list.iterator();
     }
 
     /**
@@ -240,6 +298,22 @@ public class BSTReferencedBased<E extends Comparable<? super E>> implements BSTr
      */
     @Override
     public Iterator<E> postorderIterator() {
+
         return null;
+    }
+
+    public ArrayList<E> postOrder(BSTNode<E> node)
+    {
+        ArrayList<E> list = new ArrayList<>();
+        if(node == null)
+        {
+            return list;
+        }
+
+        postOrder(node.left);
+        postOrder(node.right);
+
+        list.add(node.data);
+        return list;
     }
 }
